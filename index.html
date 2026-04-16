@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>佛山大学 · 人工智能综合应用课程</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-50: #E6F1FB;
+      --blue-200: #85B7EB;
+      --blue-400: #378ADD;
+      --blue-600: #185FA5;
+      --blue-800: #0C447C;
+      --teal-50: #E1F5EE;
+      --teal-200: #5DCAA5;
+      --teal-400: #1D9E75;
+      --teal-600: #0F6E56;
+      --teal-800: #085041;
+      --amber-50: #FAEEDA;
+      --amber-200: #FAC775;
+      --amber-400: #EF9F27;
+      --amber-600: #854F0B;
+      --amber-800: #633806;
+      --purple-50: #EEEDFE;
+      --purple-400: #7F77DD;
+      --purple-600: #534AB7;
+      --coral-50: #FAECE7;
+      --coral-400: #D85A30;
+      --green-50: #EAF3DE;
+      --green-400: #639922;
+      --gray-bg: #0a0f2e;
+      --border: rgba(255,255,255,0.1);
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255,255,255,0.65);
+      --text-muted: rgba(255,255,255,0.4);
+      --card-bg: rgba(255,255,255,0.04);
+      --card-border: rgba(255,255,255,0.1);
+      --card-hover: rgba(255,255,255,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background: #070c1f;
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── GLOBAL GRID BG ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(29,158,117,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(29,158,117,0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(7,12,31,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.875rem 0;
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 500; color: var(--text-primary);
+      text-decoration: none;
+    }
+    .nav-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--teal-400);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.7); }
+    }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 13px; color: var(--text-secondary);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 6rem 0 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow-1 {
+      position: absolute; top: -100px; right: -100px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(55,138,221,0.18) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute; bottom: 0; left: -50px;
+      width: 350px; height: 350px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(29,158,117,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(55,138,221,0.12);
+      border: 0.5px solid rgba(55,138,221,0.35);
+      color: var(--blue-200);
+      font-size: 12px; font-family: 'Space Mono', monospace;
+      padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 1.75rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-badge::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue-400);
+    }
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700; line-height: 1.2;
+      margin-bottom: 1.25rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    .hero h1 em { font-style: normal; color: var(--teal-200); }
+    .hero-desc {
+      font-size: 16px; color: var(--text-secondary);
+      max-width: 580px; line-height: 1.8;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+    .hero-stats {
+      display: flex; gap: 3rem; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+    .hero-stat .num {
+      font-size: 28px; font-weight: 700;
+      color: var(--teal-200); font-family: 'Space Mono', monospace;
+    }
+    .hero-stat .lbl { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── SECTION ─── */
+    section { padding: 4rem 0; }
+    .section-header { margin-bottom: 2rem; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-family: 'Space Mono', monospace;
+      color: var(--teal-400); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .section-tag::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--teal-400); border-radius: 2px;
+    }
+    .section-header h2 {
+      font-size: 24px; font-weight: 500; color: var(--text-primary);
+    }
+
+    /* ─── LEVELS ─── */
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .level-card {
+      background: var(--card-bg);
+      border: 0.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative; overflow: hidden;
+      transition: background 0.25s, border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .level-card:hover {
+      background: var(--card-hover);
+      transform: translateY(-3px);
+    }
+    .level-card .top-bar {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; border-radius: 16px 16px 0 0;
+    }
+    .l1 .top-bar { background: linear-gradient(90deg, var(--blue-400), var(--blue-200)); }
+    .l2 .top-bar { background: linear-gradient(90deg, var(--teal-400), var(--teal-200)); }
+    .l3 .top-bar { background: linear-gradient(90deg, var(--amber-400), var(--amber-200)); }
+
+    .level-num {
+      font-size: 11px; font-family: 'Space Mono', monospace;
+      margin-bottom: 0.75rem;
+      opacity: 0.8;
+    }
+    .l1 .level-num { color: var(--blue-400); }
+    .l2 .level-num { color: var(--teal-400); }
+    .l3 .level-num { color: var(--amber-400); }
+
+    .level-card h3 { font-size: 16px; font-weight: 500; margin-bottom: 0.5rem; }
+    .level-pill {
+      display: inline-block; font-size: 11px;
+      padding: 2px 10px; border-radius: 10px;
+      margin-bottom: 0.875rem;
+    }
+    .l1 .level-pill { background: rgba(55,138,221,0.15); color: var(--blue-200); }
+    .l2 .level-pill { background: rgba(29,158,117,0.15); color: var(--teal-200); }
+    .l3 .level-pill { background: rgba(239,159,39,0.15); color: var(--amber-200); }
+
+    .level-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1.25rem; }
+
+    .topic-list { list-style: none; border-top: 0.5px solid var(--card-border); padding-top: 0.75rem; }
+    .topic-list li {
+      font-size: 12px; color: var(--text-secondary);
+      padding: 5px 0; display: flex; align-items: flex-start; gap: 6px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.04);
+    }
+    .topic-list li:last-child { border-bottom: none; }
+    .topic-arrow { flex-shrink: 0; font-size: 10px; margin-top: 2px; }
+    .l1 .topic-arrow { color: var(--blue-400); }
+    .l2 .topic-arrow { color: var(--teal-400); }
+    .l3 .topic-arrow { color: var(--amber-400); }
+
+    /* ─── ROADMAP ─── */
+    .roadmap-wrapper {
+      background: var(--card-bg);
+      border: 0.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .roadmap-steps {
+      display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      align-items: start; gap: 0; margin-top: 0.5rem;
+    }
+    .roadmap-step { text-align: center; padding: 0 0.5rem; }
+    .step-connector {
+      display: flex; align-items: flex-start; justify-content: center;
+      padding-top: 1.75rem;
+    }
+    .step-connector svg { opacity: 0.3; }
+    .step-circle {
+      width: 48px; height: 48px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; font-family: 'Space Mono', monospace;
+      margin: 0 auto 0.75rem;
+      border: 0.5px solid;
+    }
+    .sc1 { background: rgba(55,138,221,0.1); color: var(--blue-400); border-color: rgba(55,138,221,0.3); }
+    .sc2 { background: rgba(29,158,117,0.1); color: var(--teal-400); border-color: rgba(29,158,117,0.3); }
+    .sc3 { background: rgba(239,159,39,0.1); color: var(--amber-400); border-color: rgba(239,159,39,0.3); }
+    .step-badge {
+      font-size: 10px; font-family: 'Space Mono', monospace;
+      padding: 2px 8px; border-radius: 8px; margin-bottom: 6px; display: inline-block;
+    }
+    .sb1 { background: rgba(55,138,221,0.12); color: var(--blue-200); }
+    .sb2 { background: rgba(29,158,117,0.12); color: var(--teal-200); }
+    .sb3 { background: rgba(239,159,39,0.12); color: var(--amber-200); }
+    .roadmap-step h4 { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+    .roadmap-step p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* ─── INDUSTRIES ─── */
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .ind-card {
+      background: var(--card-bg);
+      border: 0.5px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      display: flex; align-items: flex-start; gap: 1rem;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      cursor: default;
+    }
+    .ind-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255,255,255,0.18);
+      transform: translateY(-2px);
+    }
+    .ind-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .ind-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+    .ind-card p { font-size: 12px; color: var(--text-secondary); margin-bottom: 0.5rem; }
+    .ind-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .ind-tag {
+      font-size: 10px; padding: 1px 7px; border-radius: 8px;
+      border: 0.5px solid rgba(255,255,255,0.12);
+      color: var(--text-muted);
+    }
+
+    /* ─── PBL ─── */
+    .pbl-wrapper {
+      background: var(--card-bg);
+      border: 0.5px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+    .pbl-flow {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      flex-wrap: wrap; margin-top: 1.5rem;
+    }
+    .pbl-node {
+      flex: 1; min-width: 130px;
+      background: rgba(255,255,255,0.03);
+      border: 0.5px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.1rem 1rem;
+      text-align: center;
+      transition: background 0.2s;
+    }
+    .pbl-node:hover { background: rgba(255,255,255,0.06); }
+    .pbl-ico { font-size: 22px; margin-bottom: 8px; }
+    .pbl-node h5 { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+    .pbl-node p { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+    .pbl-arr {
+      display: flex; align-items: center; padding-top: 2rem;
+      color: var(--text-muted); font-size: 18px;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 0.5px solid var(--border);
+      padding: 2.5rem 0;
+      margin-top: 2rem;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .footer-meta { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--teal-200); }
+    .footer-copy { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 1.5rem; }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      height: 0.5px; background: var(--border);
+      margin: 0; border: none;
+    }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .levels-grid { grid-template-columns: 1fr; }
+      .industry-grid { grid-template-columns: 1fr 1fr; }
+      .roadmap-steps { grid-template-columns: 1fr; }
+      .step-connector { display: none; }
+      .pbl-flow { flex-direction: column; }
+      .pbl-arr { display: none; }
+      .nav-links { display: none; }
+    }
+    @media (max-width: 480px) {
+      .industry-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">
+        <span class="nav-dot"></span>
+        佛山大学 · AI综合应用课程
+      </a>
+      <ul class="nav-links">
+        <li><a href="#levels">课程层次</a></li>
+        <li><a href="#roadmap">推进路线</a></li>
+        <li><a href="#industry">产业方向</a></li>
+        <li><a href="#pbl">教学模式</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-glow-1"></div>
+      <div class="hero-glow-2"></div>
+      <div class="hero-badge">佛山大学 · 开课单位</div>
+      <h1>从零基础到<em>创新创业</em><br>培养佛山AI实战型人才</h1>
+      <p class="hero-desc">以真实AI应用为引子，PBL问题导向驱动学习，深度融合佛山本地特色产业，构建三层次进阶课程体系，打造服务粤港澳大湾区的智能制造与数字经济人才。</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">课程层次</div></div>
+        <div class="hero-stat"><div class="num">3</div><div class="lbl">推进阶段</div></div>
+        <div class="hero-stat"><div class="num">6+</div><div class="lbl">佛山特色产业方向</div></div>
+        <div class="hero-stat"><div class="num">PBL</div><div class="lbl">问题导向教学法</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- LEVELS -->
+  <section id="levels">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">课程层次体系</div>
+        <h2>三层次进阶课程架构</h2>
+      </div>
+      <div class="levels-grid">
+
+        <div class="level-card l1 reveal">
+          <div class="top-bar"></div>
+          <div class="level-num">LEVEL 01</div>
+          <h3>入门级 · AI工具应用</h3>
+          <span class="level-pill">零基础友好</span>
+          <p>以真实AI工具为切入点，解决日常与工作问题，建立AI思维与数字素养，掌握提示词工程与工具集成。</p>
+          <ul class="topic-list">
+            <li><span class="topic-arrow">▸</span>大模型提示词工程实战</li>
+            <li><span class="topic-arrow">▸</span>AI办公自动化工具应用</li>
+            <li><span class="topic-arrow">▸</span>图像 / 语音AI工具实践</li>
+            <li><span class="topic-arrow">▸</span>产业场景AI工具选型</li>
+          </ul>
+        </div>
+
+        <div class="level-card l2 reveal" style="transition-delay:0.1s">
+          <div class="top-bar"></div>
+          <div class="level-num">LEVEL 02</div>
+          <h3>进阶级 · AI科研助力</h3>
+          <span class="level-pill">实践驱动</span>
+          <p>系统学习机器学习与深度学习核心理论，结合佛山本地产业数据开展科研项目，培养独立研究能力。</p>
+          <ul class="topic-list">
+            <li><span class="topic-arrow">▸</span>机器学习模型训练与调优</li>
+            <li><span class="topic-arrow">▸</span>计算机视觉工业检测应用</li>
+            <li><span class="topic-arrow">▸</span>NLP文本分析与知识图谱</li>
+            <li><span class="topic-arrow">▸</span>产业数据采集与科研实践</li>
+          </ul>
+        </div>
+
+        <div class="level-card l3 reveal" style="transition-delay:0.2s">
+          <div class="top-bar"></div>
+          <div class="level-num">LEVEL 03</div>
+          <h3>高阶级 · 创新创业孵化</h3>
+          <span class="level-pill">面向就业创业</span>
+          <p>以真实创业项目为载体，整合产学研资源，指导学生在佛山本地产业生态中孵化AI解决方案与创业项目。</p>
+          <ul class="topic-list">
+            <li><span class="topic-arrow">▸</span>AI产品原型设计与MVP开发</li>
+            <li><span class="topic-arrow">▸</span>创业商业模式与市场分析</li>
+            <li><span class="topic-arrow">▸</span>对接佛山企业导师资源</li>
+            <li><span class="topic-arrow">▸</span>参赛 · 路演 · 投融资对接</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">三步推进路线</div>
+        <h2>从创新班到辐射湾区</h2>
+      </div>
+      <div class="roadmap-wrapper reveal">
+        <div class="roadmap-steps">
+
+          <div class="roadmap-step">
+            <div class="step-circle sc1">01</div>
+            <span class="step-badge sb1">第一步</span>
+            <h4>创新班试点</h4>
+            <p>在本校创新班率先开课，精英小班教学，快速迭代课程内容，积累教学经验与成功案例</p>
+          </div>
+
+          <div class="step-connector">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H19M13 6L19 12L13 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="roadmap-step">
+            <div class="step-circle sc2">02</div>
+            <span class="step-badge sb2">第二步</span>
+            <h4>扩展全校</h4>
+            <p>将成熟课程体系推广至全校各专业，形成跨学科AI通识教育，构建佛山大学AI人才培养生态</p>
+          </div>
+
+          <div class="step-connector">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H19M13 6L19 12L13 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="roadmap-step">
+            <div class="step-circle sc3">03</div>
+            <span class="step-badge sb3">第三步</span>
+            <h4>辐射校外</h4>
+            <p>联合佛山本地企业、政府及院校，开放课程资源，打造湾区AI教育共同体与产教融合典范</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- INDUSTRY -->
+  <section id="industry">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">产业方向</div>
+        <h2>紧密结合佛山本地特色产业</h2>
+      </div>
+      <div class="industry-grid">
+
+        <div class="ind-card reveal">
+          <div class="ind-icon" style="background:rgba(55,138,221,0.12);">🤖</div>
+          <div>
+            <h4>智能制造</h4>
+            <p>机器人 · 工业自动化 · 精密加工</p>
+            <div class="ind-tags">
+              <span class="ind-tag">视觉检测</span>
+              <span class="ind-tag">预测性维护</span>
+              <span class="ind-tag">数字孪生</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ind-card reveal" style="transition-delay:0.05s">
+          <div class="ind-icon" style="background:rgba(239,159,39,0.1);">🏺</div>
+          <div>
+            <h4>陶瓷建材</h4>
+            <p>质检自动化 · AI辅助设计生成</p>
+            <div class="ind-tags">
+              <span class="ind-tag">缺陷检测</span>
+              <span class="ind-tag">图案生成</span>
+              <span class="ind-tag">工艺优化</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ind-card reveal" style="transition-delay:0.1s">
+          <div class="ind-icon" style="background:rgba(29,158,117,0.1);">🏠</div>
+          <div>
+            <h4>家居家电</h4>
+            <p>智能家居 · 个性化定制 · 服务机器人</p>
+            <div class="ind-tags">
+              <span class="ind-tag">AIoT集成</span>
+              <span class="ind-tag">用户画像</span>
+              <span class="ind-tag">柔性生产</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ind-card reveal" style="transition-delay:0.15s">
+          <div class="ind-icon" style="background:rgba(212,83,126,0.1);">🏥</div>
+          <div>
+            <h4>医疗大健康</h4>
+            <p>AI影像诊断 · 健康管理 · 中医数字化</p>
+            <div class="ind-tags">
+              <span class="ind-tag">医学影像</span>
+              <span class="ind-tag">知识图谱</span>
+              <span class="ind-tag">智慧医院</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ind-card reveal" style="transition-delay:0.2s">
+          <div class="ind-icon" style="background:rgba(127,119,221,0.1);">👗</div>
+          <div>
+            <h4>纺织服装</h4>
+            <p>设计生成 · 供应链优化 · 智能仓储</p>
+            <div class="ind-tags">
+              <span class="ind-tag">款式生成</span>
+              <span class="ind-tag">需求预测</span>
+              <span class="ind-tag">质量管控</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="ind-card reveal" style="transition-delay:0.25s">
+          <div class="ind-icon" style="background:rgba(99,153,34,0.1);">💡</div>
+          <div>
+            <h4>数字经济</h4>
+            <p>文创 · 电商直播 · 数字营销 · 文旅</p>
+            <div class="ind-tags">
+              <span class="ind-tag">AIGC创作</span>
+              <span class="ind-tag">智能客服</span>
+              <span class="ind-tag">数据分析</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PBL -->
+  <section id="pbl">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">教学模式</div>
+        <h2>PBL问题导向学习全流程</h2>
+      </div>
+      <div class="pbl-wrapper reveal">
+        <div class="pbl-flow">
+          <div class="pbl-node">
+            <div class="pbl-ico">🎯</div>
+            <h5>真实问题引入</h5>
+            <p>佛山产业真实场景案例驱动学习出发点</p>
+          </div>
+          <div class="pbl-arr">›</div>
+          <div class="pbl-node">
+            <div class="pbl-ico">🔍</div>
+            <h5>问题拆解分析</h5>
+            <p>小组协作，定义AI解决路径与目标</p>
+          </div>
+          <div class="pbl-arr">›</div>
+          <div class="pbl-node">
+            <div class="pbl-ico">🛠️</div>
+            <h5>工具选型实践</h5>
+            <p>按层次调用AI工具或自建模型方案</p>
+          </div>
+          <div class="pbl-arr">›</div>
+          <div class="pbl-node">
+            <div class="pbl-ico">📊</div>
+            <h5>成果展示评估</h5>
+            <p>对接企业导师点评，迭代优化方案</p>
+          </div>
+          <div class="pbl-arr">›</div>
+          <div class="pbl-node">
+            <div class="pbl-ico">🚀</div>
+            <h5>迭代与孵化</h5>
+            <p>高阶项目进入创业孵化与竞赛通道</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">佛山大学 · 人工智能综合应用课程</div>
+          <div class="footer-meta">开课单位：佛山大学 &nbsp;·&nbsp; 教学模式：PBL问题导向 &nbsp;·&nbsp; 服务方向：粤港澳大湾区产业人才</div>
+        </div>
+        <ul class="footer-links">
+          <li><a href="#levels">课程层次</a></li>
+          <li><a href="#roadmap">推进路线</a></li>
+          <li><a href="#industry">产业方向</a></li>
+          <li><a href="#pbl">教学模式</a></li>
+        </ul>
+      </div>
+      <p class="footer-copy">© 2025 佛山大学 · 人工智能综合应用课程 · 保留所有权利</p>
+    </div>
+  </footer>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => io.observe(el));
+  </script>
+
+</body>
+</html>
